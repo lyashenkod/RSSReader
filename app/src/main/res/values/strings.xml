@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">RSSReader</string>
+    <string name="rss_linc">Rss Источники</string>
+    <string name="loading_news">Загрузка новостей</string>
+    <string name="loading">Загрузка...</string>
+    <string name="receiverName">Получатель: %1$s</string>
+    <string name="title_activity_url">UrlListActivity</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_description">Описание</string>
+    <string name="rss_url">Cсылка на RSS ресурс</string>
+    <string name="rss_desc">Описание</string>
+    <string name="rss_add">Добавить</string>
+    <string name="delete_item">Удалить</string>
+    <string name="to_linc">Читать в браузере</string>
+    <string name="add_fields">Заполните все поля!!!</string>
+    <string name="add_rss_lincs">Добавьте Rss источники, жмякнув на плюсик</string>
+    <string name="title_activity_description_rss_item">DescriptionRssItemActivity</string>
+
+
+</resources>
