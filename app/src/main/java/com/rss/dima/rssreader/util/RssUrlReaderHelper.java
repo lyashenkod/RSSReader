@@ -16,15 +16,15 @@ public class RssUrlReaderHelper {
     private static final String TAG = "RssUrlLab";
     private static final String FILENAME = "rssUrl.json";
 
-    private static RssUrlReaderHelper rssUrlLab;
-    private Context mAppContext;
+    private static RssUrlReaderHelper rssUrlHelper;
+    private Context context;
     private ArrayList<RssUrl> rssUrls;
     private RssUrlJSONSerializer mSerializer;
 
 
-    public RssUrlReaderHelper(Context appContext) {
-        mAppContext = appContext;
-        mSerializer = new RssUrlJSONSerializer(mAppContext, FILENAME);
+    public RssUrlReaderHelper(Context eContext) {
+        context = eContext;
+        mSerializer = new RssUrlJSONSerializer(context, FILENAME);
         rssUrls = new ArrayList<RssUrl>();
         try {
             rssUrls = mSerializer.loadRssUrl();
@@ -36,18 +36,18 @@ public class RssUrlReaderHelper {
     }
 
     public static RssUrlReaderHelper get(Context c) {
-        if (rssUrlLab == null) {
-            rssUrlLab = new RssUrlReaderHelper(c.getApplicationContext());
+        if (rssUrlHelper == null) {
+            rssUrlHelper = new RssUrlReaderHelper(c.getApplicationContext());
         }
-        return rssUrlLab;
+        return rssUrlHelper;
     }
 
 
-    public ArrayList<RssUrl> getRssUrlsList() {
+    public ArrayList<RssUrl> getRssUrls() {
         return rssUrls;
     }
 
-    public RssUrl getRssUrlToId(UUID id) {
+    public RssUrl getRssUrl(UUID id) {
         for (RssUrl url : rssUrls) {
             if (url.getId().equals(id))
                 return url;

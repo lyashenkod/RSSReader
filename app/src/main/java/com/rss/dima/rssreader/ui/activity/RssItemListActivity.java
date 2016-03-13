@@ -1,8 +1,9 @@
 package com.rss.dima.rssreader.ui.activity;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,37 +20,67 @@ import com.rss.dima.rssreader.util.RssUrlReaderHelper;
 import java.util.List;
 import java.util.UUID;
 
-public class RssItemListActivity extends AppCompatActivity {
+public class RssItemListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private String TAG = "RssReader";
     private ListView rssListView;
-    private ProgressDialog progressDialog;
     private String urlLink;
-    RssItemAdapter adapter;
+    private SwipeRefreshLayout refreshLayout;
+    private RssItemAdapter itemAdapter;
+    private CountDownTimer refreshTimer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_rss_item_list);
 
         String txtName = getIntent().getStringExtra(RssUrlItemListListener.RssUrlId);
         UUID rssUrlId = UUID.fromString(txtName);
 
         ActionBar actionBar = getSupportActionBar();
-        String title = new RssUrlReaderHelper(RssItemListActivity.this).getRssUrlToId(rssUrlId).getDescription();
-        actionBar.setTitle(title);
+        String actionBarTitle = new RssUrlReaderHelper(RssItemListActivity.this).getRssUrl(rssUrlId).getDescription();
+        actionBar.setTitle(actionBarTitle);
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.list_refresh);
+        refreshLayout.setOnRefreshListener(this);
 
-        rssListView = (ListView) findViewById(R.id.listMainView);
+        rssListView = (ListView) findViewById(R.id.rss_list_view);
 
-        urlLink = new RssUrlReaderHelper(RssItemListActivity.this).getRssUrlToId(rssUrlId).getRssReaderUrl();
+        urlLink = new RssUrlReaderHelper(RssItemListActivity.this).getRssUrl(rssUrlId).getRssReaderUrl();
 
+        onRefresh();
+
+        onRefreshTimer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        refreshTimer.cancel();
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshLayout.setRefreshing(true);
         GetRSSDataTask task = new GetRSSDataTask();
         task.execute(urlLink);
+        return;
+    }
 
+    private void onRefreshTimer() {
+        int timerRefreshMs = 180000;
+        refreshTimer = new CountDownTimer(timerRefreshMs, timerRefreshMs) {
 
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
 
-
+            @Override
+            public void onFinish() {
+                onRefresh();
+                refreshTimer.start();
+            }
+        }.start();
     }
 
     private class GetRSSDataTask extends AsyncTask<String, Void, List<RssItem>> {
@@ -57,18 +88,14 @@ public class RssItemListActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(RssItemListActivity.this);
-            progressDialog.setTitle(getFormatResource(R.string.loading_news));
-            progressDialog.setMessage(getFormatResource(R.string.loading));
-            progressDialog.setIndeterminate(false);
-            progressDialog.show();
+
         }
 
         @Override
         protected List<RssItem> doInBackground(String... urls) {
             try {
                 RssReaderHelper rssReader = new RssReaderHelper(urls[0]);
-                rssReader.addLinkItemsDb(RssItemListActivity.this);
+                rssReader.addItemsDb(RssItemListActivity.this);
                 return rssReader.getItems();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -79,19 +106,11 @@ public class RssItemListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<RssItem> result) {
-            List<RssItem> rssItems = new RssReaderHelper().getItemsUtlDb(RssItemListActivity.this, urlLink);
-            adapter = new RssItemAdapter(RssItemListActivity.this, R.layout.list_item, rssItems);
-            rssListView.setAdapter(adapter);
+            List<RssItem> rssItems = new RssReaderHelper().getItemsDb(RssItemListActivity.this, urlLink);
+            itemAdapter = new RssItemAdapter(RssItemListActivity.this, R.layout.list_item, rssItems);
+            rssListView.setAdapter(itemAdapter);
             rssListView.setOnItemClickListener(new RssItemListListener(rssItems, RssItemListActivity.this));
-            progressDialog.dismiss();
+            refreshLayout.setRefreshing(false);
         }
     }
-
-
-
-    private String getFormatResource(int id) {
-        return String.format(getResources().getString(id));
-    }
-
-
 }

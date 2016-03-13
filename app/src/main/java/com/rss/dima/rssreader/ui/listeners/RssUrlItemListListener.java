@@ -24,8 +24,8 @@ public class RssUrlItemListListener implements AdapterView.OnItemClickListener {
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-        Intent intent = new Intent(activity, RssItemListActivity.class);
-        intent.putExtra(RssUrlId, listItems.get(pos).getId().toString());
-        activity.startActivity(intent);
+        Intent goItemListActivityIntent = new Intent(activity, RssItemListActivity.class);
+        goItemListActivityIntent.putExtra(RssUrlId, listItems.get(pos).getId().toString());
+        activity.startActivity(goItemListActivityIntent);
     }
 }

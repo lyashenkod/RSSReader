@@ -83,7 +83,7 @@ public class RssItemDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<RssItem> getUrlLinkRssItems(String link) {
+    public List<RssItem> getRssItems(String link) {
         List<RssItem> rssItemList = new ArrayList<RssItem>();
         String selectQuery = "SELECT  * FROM " + TABLE_RSS_ITEMS + " WHERE " + READER_URL + " LIKE " + "\'" + link + "\'";
         SQLiteDatabase db = this.getWritableDatabase();
@@ -105,7 +105,7 @@ public class RssItemDatabase extends SQLiteOpenHelper {
         return rssItemList;
     }
 
-    public List<RssItem> getAllRssItems() {
+    public List<RssItem> getRssItems() {
         List<RssItem> rssItemList = new ArrayList<RssItem>();
         String selectQuery = "SELECT  * FROM " + TABLE_RSS_ITEMS;
 
@@ -134,7 +134,7 @@ public class RssItemDatabase extends SQLiteOpenHelper {
     }
 
 
-    public void delItemToLink(String link) {
+    public void deleteRssItem(String link) {
         String selectQuery = "SELECT  * FROM " + TABLE_RSS_ITEMS + " WHERE " + READER_URL + " LIKE " + "\'" + link + "\'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -154,7 +154,7 @@ public class RssItemDatabase extends SQLiteOpenHelper {
     }
 
 
-    public RssItem getRssItemToId(int id) {
+    public RssItem getRssItem(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_RSS_ITEMS, new String[]{ID,
                         READER_URL, TITLE, LINK, DESCRIPTION, FULLTEXT, PUBDATE}, ID + "=?",
@@ -177,7 +177,7 @@ public class RssItemDatabase extends SQLiteOpenHelper {
         return rssItem;
     }
 
-    public RssItem getFirstRssItemToLink(String link) {
+    public RssItem getFirstRssItem(String link) {
         String selectQuery = "SELECT  * FROM " + TABLE_RSS_ITEMS + " WHERE " + READER_URL + " LIKE " + "\'" + link + "\'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

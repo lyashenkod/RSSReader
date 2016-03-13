@@ -22,24 +22,24 @@ import java.util.ArrayList;
  * Created by Dima on 11.03.2016.
  */
 public class RssUrlJSONSerializer {
-    private Context mContext;
-    private String mFilename;
+    private Context context;
+    private String filename;
 
-    public RssUrlJSONSerializer(Context c, String f) {
-        mContext = c;
-        mFilename = f;
+    public RssUrlJSONSerializer(Context eContext, String eFilename) {
+        context = eContext;
+        filename = eFilename;
     }
 
-    public void saveRssUrl(ArrayList<RssUrl> urls)
+    public void saveRssUrl(ArrayList<RssUrl> rssUrls)
             throws JSONException, IOException {
         JSONArray array = new JSONArray();
-        for (RssUrl url : urls)
-            array.put(url.toJSON());
+        for (RssUrl rssUrl : rssUrls)
+            array.put(rssUrl.toJSON());
 
         Writer writer = null;
         try {
-            OutputStream out = mContext
-                    .openFileOutput(mFilename, Context.MODE_PRIVATE);
+            OutputStream out = context
+                    .openFileOutput(filename, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(out);
             writer.write(array.toString());
         } finally {
@@ -53,7 +53,7 @@ public class RssUrlJSONSerializer {
         ArrayList<RssUrl> rssUrls = new ArrayList<RssUrl>();
         BufferedReader reader = null;
         try {
-            InputStream in = mContext.openFileInput(mFilename);
+            InputStream in = context.openFileInput(filename);
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder jsonString = new StringBuilder();
             String line = null;

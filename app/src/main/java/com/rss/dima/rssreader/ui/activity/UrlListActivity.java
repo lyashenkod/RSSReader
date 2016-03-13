@@ -24,28 +24,26 @@ import java.util.ArrayList;
 
 public class UrlListActivity extends ActionBarActivity {
 
-    private ArrayList<RssUrl> rssUrls;
-    private ListView listView;
-    private RssUrlAdapter adapter;
+    private ArrayList<RssUrl> rssUrlsList;
+    private ListView rssUrllistView;
+    private RssUrlAdapter rssUrlAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_url);
+        setContentView(R.layout.activity_rssurl_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.rss_linc);
         setSupportActionBar(toolbar);
 
-        listView = (ListView) findViewById(R.id.url_list_view);
-        registerForContextMenu(listView);
-        listView.setEmptyView(findViewById(R.id.empty_viev));
+        rssUrllistView = (ListView) findViewById(R.id.url_list_view);
+        registerForContextMenu(rssUrllistView);
+        rssUrllistView.setEmptyView(findViewById(R.id.empty_viev));
 
-        rssUrls = RssUrlReaderHelper.get(UrlListActivity.this).getRssUrlsList();
-        adapter = new RssUrlAdapter(UrlListActivity.this, R.layout.list_item, rssUrls);
-        listView.setOnItemClickListener(new RssUrlItemListListener(rssUrls, UrlListActivity.this));
-        listView.setAdapter(adapter);
-
-        //    refreshList();
+        rssUrlsList = RssUrlReaderHelper.get(UrlListActivity.this).getRssUrls();
+        rssUrlAdapter = new RssUrlAdapter(UrlListActivity.this, R.layout.list_item, rssUrlsList);
+        rssUrllistView.setOnItemClickListener(new RssUrlItemListListener(rssUrlsList, UrlListActivity.this));
+        rssUrllistView.setAdapter(rssUrlAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +63,12 @@ public class UrlListActivity extends ActionBarActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int position = info.position;
-        RssUrl rssUrl = adapter.getItem(position);
+        RssUrl rssUrl = rssUrlAdapter.getItem(position);
 
         switch (item.getItemId()) {
             case R.id.menu_item_delete:
                 RssUrlReaderHelper.get(UrlListActivity.this).deleteRssUrl(rssUrl);
-                adapter.notifyDataSetChanged();
+                rssUrlAdapter.notifyDataSetChanged();
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -105,8 +103,8 @@ public class UrlListActivity extends ActionBarActivity {
 
 
     private void refreshList() {
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
+        rssUrlAdapter.notifyDataSetChanged();
+        rssUrllistView.setAdapter(rssUrlAdapter);
     }
 
     private String getFormatResource(int id) {

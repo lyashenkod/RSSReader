@@ -40,11 +40,11 @@ public class RssReaderHelper {
     }
 
 
-    public void addLinkItemsDb(Context context) throws Exception {
+    public void addItemsDb(Context context) throws Exception {
         List<RssItem> list = getItems();
         RssItemDatabase db = new RssItemDatabase(context);
         if (getItems() != null) {
-            db.delItemToLink(rssUrl);
+            db.deleteRssItem(rssUrl);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).setRssReaderUrl(rssUrl);
                 db.addRssItem(list.get(i));
@@ -53,21 +53,21 @@ public class RssReaderHelper {
         }
     }
 
-    public List<RssItem> getItemsUtlDb(Context context, String urllLink) {
+    public List<RssItem> getItemsDb(Context context, String urllLink) {
         RssItemDatabase db = new RssItemDatabase(context);
-        return db.getUrlLinkRssItems(urllLink);
+        return db.getRssItems(urllLink);
 
     }
 
-    public RssItem getItemToIdDb(Context context, Integer id) {
+    public RssItem getItemDb(Context context, Integer id) {
         RssItemDatabase db = new RssItemDatabase(context);
-        return db.getRssItemToId(id);
+        return db.getRssItem(id);
 
     }
 
-    public List<RssItem> getAllItemsDb(Context context) {
+    public List<RssItem> getItemsDb(Context context) {
         RssItemDatabase db = new RssItemDatabase(context);
-        return db.getAllRssItems();
+        return db.getRssItems();
 
     }
 
