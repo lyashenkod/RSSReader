@@ -189,19 +189,6 @@ public class RssItemDatabase extends SQLiteOpenHelper {
 
     }
 
-    public int updateRssItem(RssItem rssItem) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(READER_URL, rssItem.getRssReaderUrl());
-        values.put(TITLE, rssItem.getTitle());
-        values.put(LINK, rssItem.getLink());
-        values.put(DESCRIPTION, rssItem.getDescription());
-        values.put(FULLTEXT, rssItem.getFulltext());
-        values.put(PUBDATE, rssItem.getPubDate());
-        return db.update(TABLE_RSS_ITEMS, values, ID + " = ?",
-                new String[]{String.valueOf(rssItem.getId())});
-    }
-
     public void deleteAllItems() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RSS_ITEMS, null, null);
