@@ -100,7 +100,7 @@ public class RssItemListActivity extends AppCompatActivity implements SwipeRefre
                 return rssReader.getItems();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
-                errorMessage(e);
+                showExceptionMessage(e);
             }
 
             return null;
@@ -117,8 +117,9 @@ public class RssItemListActivity extends AppCompatActivity implements SwipeRefre
     }
 
 
-    private void errorMessage(final Exception e) {
-        if (e.toString().startsWith("java.io.IOException: Couldn't open")) {
+    private void showExceptionMessage(final Exception e) {
+        String errorMessage = "java.io.IOException: Couldn't open";
+        if (e.toString().startsWith(errorMessage)) {
             runOnUiThread(new Runnable() {
 
                 @Override
