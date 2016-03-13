@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.rss.dima.rssreader.R;
 import com.rss.dima.rssreader.entity.RssItem;
@@ -99,6 +100,7 @@ public class RssItemListActivity extends AppCompatActivity implements SwipeRefre
                 return rssReader.getItems();
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                errorMessage(e);
             }
 
             return null;
@@ -112,5 +114,24 @@ public class RssItemListActivity extends AppCompatActivity implements SwipeRefre
             rssListView.setOnItemClickListener(new RssItemListListener(rssItems, RssItemListActivity.this));
             refreshLayout.setRefreshing(false);
         }
+    }
+
+
+    private void errorMessage(final Exception e) {
+        if (e.toString().startsWith("java.io.IOException: Couldn't open")) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast errorToast = Toast.makeText(getApplicationContext(), getFormatResource(R.string.internet_eror),
+                            Toast.LENGTH_SHORT);
+                    errorToast.show();
+                }
+            });
+        }
+    }
+
+    private String getFormatResource(int id) {
+        return String.format(getResources().getString(id));
     }
 }

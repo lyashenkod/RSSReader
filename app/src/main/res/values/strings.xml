@@ -13,6 +13,7 @@
     <string name="delete_item">Удалить</string>
     <string name="to_linc">Читать в браузере</string>
     <string name="add_fields">Заполните все поля!!!</string>
+    <string name="internet_eror">Нет подключения к интернету!!!</string>
     <string name="add_rss_lincs">Добавьте Rss источники, жмякнув на плюсик</string>
     <string name="enpty_rss_list">Упс! Не удалось загрузить данные </string>
     <string name="title_activity_description_rss_item">DescriptionRssItemActivity</string>
